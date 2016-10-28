@@ -2,8 +2,12 @@ import React from 'react';
 
 class AppHeader extends React.Component {
   render() {
+    const overideNavBar = {
+      marginBottom: 0,
+    };
+
     return (
-      <nav className="navbar navbar-inverse navbar-absolute">
+      <nav className="navbar navbar-inverse navbar-absolute" style={overideNavBar}>
         <div className="container">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navigation-example">

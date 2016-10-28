@@ -2,12 +2,12 @@ import React from 'react';
 
 const Card = (props) => {
   const cardIcon = {
-    'width': '80px',
-    'line-height': '80px',
-    'height': '80px',
+    width: '80px',
+    lineHeight: '80px',
+    height: '80px',
   };
   const cardTitle = {
-    'margin-top': '10px',
+    marginTop: '10px',
   };
 
   return (
