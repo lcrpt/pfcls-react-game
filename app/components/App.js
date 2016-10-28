@@ -2,14 +2,16 @@ import React from 'react';
 import Cards from './Cards';
 import SetUpGameRules from './setup-game/SetUpGameRules';
 import WinningPlayer from './WinningPlayer';
+import GameInfosBar from './GameInfosBar';
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      status: 'setup',
+      status: 'playing',
       game: {
+        time: 0,
         tourInterval: 3,
         winningScore: 3,
       },
@@ -43,16 +45,32 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('this.state', this.state);
     switch (this.state.status) {
       case 'setup':
-        return <SetUpGameRules handler={this.handleSubmit} players={this.state.players} />;
+        return (
+          <SetUpGameRules
+            handler={this.handleSubmit}
+            players={this.state.players}
+          />
+        );
         break;
       case 'playing':
-        return <Cards />;
+        return (
+          <div>
+            <GameInfosBar
+              players={this.state.players}
+              game={this.state.game}
+            />
+            <Cards />
+          </div>
+        );
         break;
       case 'winner':
-        return <WinningPlayer />;
+        return (
+          <div>
+            <WinningPlayer />
+          </div>
+        );
         break;
       default:
         return <SetUpGameRules handler={this.handleSubmit} players={this.state.players} />;
