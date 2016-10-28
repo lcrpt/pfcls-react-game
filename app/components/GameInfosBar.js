@@ -11,13 +11,13 @@ const GameInfosBar = (props) => {
       <div className="container">
         <div className="row">
           <ul className="pull-left">
-            <li><a>{props.players.firstPlayer.name} <span className="badge">1</span></a></li>
+            <li><a>{props.players.firstPlayer.name} <span className="badge">{props.players.firstPlayer.score}</span></a></li>
           </ul>
           <ul className="pull-center">
-            <li><button className="btn btn-danger">{props.game.time}</button></li>
+            <li><button className="btn btn-danger">{props.game.timer}</button></li>
           </ul>
           <ul className="pull-right">
-            <li><a>{props.players.secondPlayer.name} <span className="badge">2</span></a></li>
+            <li><a>{props.players.secondPlayer.name} <span className="badge">{props.players.secondPlayer.score}</span></a></li>
           </ul>
         </div>
       </div>
@@ -25,9 +25,20 @@ const GameInfosBar = (props) => {
   );
 };
 
-export default GameInfosBar;
-
 GameInfosBar.propTypes = {
-  players: React.PropTypes.object,
-  game: React.PropTypes.object,
+  players: React.PropTypes.shape({
+    firstPlayer: React.PropTypes.shape({
+      name: React.PropTypes.stringisRequired,
+      score: React.PropTypes.numberisRequired,
+    }),
+    secondPlayer: React.PropTypes.shape({
+      name: React.PropTypes.stringisRequired,
+      score: React.PropTypes.numberisRequired,
+    }),
+  }),
+  game: React.PropTypes.shape({
+    timer: React.PropTypes.numberisRequired,
+  }),
 };
+
+export default GameInfosBar;
