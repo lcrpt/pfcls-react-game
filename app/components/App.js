@@ -8,7 +8,7 @@ class App extends React.Component {
     super();
 
     this.state = {
-      status: 'init',
+      status: 'setup',
       game: {
         tourInterval: 3,
         winningScore: 3,
@@ -30,6 +30,7 @@ class App extends React.Component {
 
   handleSubmit(players) {
     this.setState({
+      status: 'playing',
       players: {
         firstPlayer: {
           name: players.firstPlayerName,
@@ -44,7 +45,7 @@ class App extends React.Component {
   render() {
     console.log('this.state', this.state);
     switch (this.state.status) {
-      case 'init':
+      case 'setup':
         return <SetUpGameRules handler={this.handleSubmit} players={this.state.players} />;
         break;
       case 'playing':
