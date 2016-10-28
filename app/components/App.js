@@ -14,9 +14,9 @@ class App extends React.Component {
       status: 'setup',
       game: {
         isRunning: false,
-        round: 0,
+        round: 1,
         timer: 0,
-        roundInterval: 5,
+        roundInterval: 3,
         winningScore: 3,
         roundTimer: 3,
       },
@@ -51,17 +51,17 @@ class App extends React.Component {
           score: 0,
         },
       },
+    }, () => {
+      this.updateRound(this.state.game.round);
     });
-
-    this.updateRound(this.state.game.round);
   }
 
   handleSelectCard(card) {
-    
+
   }
 
   updateRound(round) {
-    const availableRound = [0, 1, 2];
+    const availableRound = [1, 2];
 
     if (isNumber(round) && includes(availableRound, round)) {
       this.setState({
@@ -74,7 +74,13 @@ class App extends React.Component {
         this.timer();
       });
     } else {
-      this.setState({ game: { isRunning: false } });
+      this.setState({
+        game: {
+          isRunning: false,
+        },
+      }, () => {
+        this.setState({ status: 'winner' });
+      });
     }
   }
 
@@ -86,14 +92,24 @@ class App extends React.Component {
       const timer = setInterval(() => {
         seconds = parseInt(roundInterval % 60, 10);
         this.setState({
-          game: { timer: seconds },
+          game: {
+            timer: seconds,
+            round: this.state.game.round,
+            roundInterval: this.state.game.roundInterval,
+          },
         });
 
         if (--roundInterval < 0) {
           this.setState({
-            game: { isRunning: false, timer: 0 },
+            game: {
+              isRunning: false,
+              timer: 0,
+              round: this.state.game.round,
+              roundInterval: this.state.game.roundInterval,
+            },
           }, () => {
             clearInterval(timer);
+            this.updateRound(this.state.game.round);
           });
         }
       }, 1000);
@@ -108,7 +124,7 @@ class App extends React.Component {
           <SetUpGameRules
             handler={this.handleSubmit}
             players={this.state.players}
-          />
+            />
         );
         break;
       case 'playing':
@@ -117,10 +133,10 @@ class App extends React.Component {
             <GameInfosBar
               players={this.state.players}
               game={this.state.game}
-            />
+              />
             <Cards
               handler={this.handleSelectCard}
-            />
+              />
           </div>
         );
         break;
