@@ -13,6 +13,7 @@
   "extends": "airbnb",
   "rules": {
     "space-before-function-paren": 0,
-    "react/prefer-stateless-function": 1
+    "react/prefer-stateless-function": 1,
+    "forbid-prop-types": [0, { "forbid": ['any', 'array', 'object'] }]
   }
 }

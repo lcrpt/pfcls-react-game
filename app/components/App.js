@@ -1,6 +1,6 @@
 import React from 'react';
 import Cards from './Cards';
-import SetUpGame from './SetUpGame';
+import SetUpGameRules from './setup-game/SetUpGameRules';
 import WinningPlayer from './WinningPlayer';
 
 class App extends React.Component {
@@ -8,18 +8,18 @@ class App extends React.Component {
     super();
 
     this.state = {
-      status: 'init',
+      status: 'setup',
       game: {
         tourInterval: 3,
         winningScore: 3,
       },
       players: {
         firstPlayer: {
-          name: '',
+          name: 'Sheldon',
           score: 0,
         },
         secondPlayer: {
-          name: '',
+          name: 'Leonard',
           score: 0,
         },
       },
@@ -28,20 +28,25 @@ class App extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log('event', event.target.value);
-    console.log('event', event);
-    console.log('totototootototo');
-
-
-    // this.setState({  }, this.sendFormData);
+  handleSubmit(players) {
+    this.setState({
+      status: 'playing',
+      players: {
+        firstPlayer: {
+          name: players.firstPlayerName,
+        },
+        secondPlayer: {
+          name: players.secondPlayerName,
+        },
+      },
+    });
   }
 
   render() {
+    console.log('this.state', this.state);
     switch (this.state.status) {
-      case 'init':
-        return <SetUpGame handler={this.handleSubmit} />;
+      case 'setup':
+        return <SetUpGameRules handler={this.handleSubmit} players={this.state.players} />;
         break;
       case 'playing':
         return <Cards />;
@@ -50,7 +55,7 @@ class App extends React.Component {
         return <WinningPlayer />;
         break;
       default:
-        return <SetUpGame />;
+        return <SetUpGameRules handler={this.handleSubmit} players={this.state.players} />;
     }
   }
 };
