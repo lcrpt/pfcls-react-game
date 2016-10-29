@@ -9,9 +9,11 @@ class Card extends React.Component {
   handleClick(event) {
     event.preventDefault();
 
-    this.props.handler({
-      card: this.props.data,
-    });
+    if (this.props.handler) {
+      this.props.handler({
+        card: this.props.data,
+      });
+    }
   }
 
   render() {
@@ -47,7 +49,7 @@ Card.propTypes = {
     name: React.PropTypes.string.isRequired,
   }),
   col: React.PropTypes.string.isRequired,
-  handler: React.PropTypes.func.isRequired,
+  handler: React.PropTypes.func,
 };
 
 export default Card;

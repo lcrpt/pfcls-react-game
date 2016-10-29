@@ -29,7 +29,8 @@ class SetUpGameRules extends React.Component {
                   <div className="container" style={fixContainer}>
                     <PlayersNameForm
                       handler={this.props.handler}
-                      players={this.props.players}
+                      firstPlayer={this.props.firstPlayer}
+                      secondPlayer={this.props.secondPlayer}
                     />
                   </div>
                 </div>
@@ -44,7 +45,8 @@ class SetUpGameRules extends React.Component {
 
 SetUpGameRules.propTypes = {
   handler: React.PropTypes.func.isRequired,
-  players: React.PropTypes.object,
+  firstPlayer: React.PropTypes.object.isRequired,
+  secondPlayer: React.PropTypes.object.isRequired,
 };
 
 export default SetUpGameRules;
