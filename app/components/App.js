@@ -39,22 +39,6 @@ class App extends React.Component {
     this.timer = this.timer.bind(this);
   }
 
-  handleSubmit(players) {
-    this.setState({
-      status: 'playing',
-      firstPlayer: {
-        name: players.firstPlayerName,
-        score: 0,
-      },
-      secondPlayer: {
-        name: players.secondPlayerName,
-        score: 0,
-      },
-    }, () => {
-      this.updateRound(this.state.game.round);
-    });
-  }
-
   getCurrentPlayer() {
     let player = '';
 
@@ -72,6 +56,22 @@ class App extends React.Component {
     return player;
   }
 
+  handleSubmit(players) {
+    this.setState({
+      status: 'playing',
+      firstPlayer: {
+        name: players.firstPlayerName,
+        score: 0,
+      },
+      secondPlayer: {
+        name: players.secondPlayerName,
+        score: 0,
+      },
+    }, () => {
+      this.updateRound(this.state.game.round);
+    });
+  }
+
   handleSelectCard(card) {
     const player = this.getCurrentPlayer();
 
@@ -82,7 +82,7 @@ class App extends React.Component {
         selectedCard: card.card.slug,
       },
     }, () => {
-      console.log('this.state[player]', this.state[player]);
+      this.updateRound(this.state.game.round);
     });
   }
 
@@ -112,18 +112,24 @@ class App extends React.Component {
 
   timer() {
     if (this.state.game.isRunning && this.state.game.roundInterval) {
+      const round = this.state.game.round;
       let seconds;
       let roundInterval = this.state.game.roundInterval;
 
       const timer = setInterval(() => {
         seconds = parseInt(roundInterval % 60, 10);
-        this.setState({
-          game: {
-            timer: seconds,
-            round: this.state.game.round,
-            roundInterval: this.state.game.roundInterval,
-          },
-        });
+
+        if (this.state.game.round === round) {
+          this.setState({
+            game: {
+              timer: seconds,
+              round: this.state.game.round,
+              roundInterval: this.state.game.roundInterval,
+            },
+          });
+        } else {
+          clearInterval(timer);
+        }
 
         if (--roundInterval < 0) {
           this.setState({
@@ -141,7 +147,6 @@ class App extends React.Component {
       }, 1000);
     }
   }
-
 
   render() {
     switch (this.state.status) {
