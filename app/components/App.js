@@ -1,11 +1,12 @@
 import React from 'react';
 import { isNumber, includes, find, isUndefined } from 'lodash';
 
+import data from '../data/cards';
+
 import Cards from './Cards';
 import SetUpGameRules from './setup-game/SetUpGameRules';
-import WinningPlayer from './WinningPlayer';
+import WinningPlayer from './winner-panel/WinningPlayer';
 import GameInfosBar from './GameInfosBar';
-import data from '../data/cards';
 
 class App extends React.Component {
   constructor() {
@@ -32,7 +33,7 @@ class App extends React.Component {
       },
       winner: {
         isWinner: false,
-        player: {
+        winner: {
           name: '',
           score: 0,
           selectedCard: '',
@@ -177,11 +178,11 @@ class App extends React.Component {
       this.setState({
         winner: {
           isWinner: true,
-          player: this.state[player],
+          winner: this.state[player],
           card,
         },
       }, () => {
-
+        this.setState({ status: 'winner' });
       });
     });
   }
@@ -192,7 +193,7 @@ class App extends React.Component {
         isWinner: false,
       },
     }, () => {
-      
+      this.setState({ status: 'winner' });
     });
   }
 
@@ -206,9 +207,15 @@ class App extends React.Component {
         !isUndefined(secondPlayerCardSlug) ||
         !isUndefined(firstPlayerCard) ||
         !isUndefined(secondPlayerCard)) {
-      if (includes(firstPlayerCard.winningCards, secondPlayerCardSlug)) {
+      if (
+        firstPlayerCard.winningCards &&
+        includes(firstPlayerCard.winningCards, secondPlayerCardSlug)
+      ) {
         this.setWinner({ player: 'firstPlayer', card: firstPlayerCard });
-      } else if (includes(secondPlayerCard.winningCards, firstPlayerCardSlug)) {
+      } else if (
+        secondPlayerCard.winningCards &&
+        includes(secondPlayerCard.winningCards, firstPlayerCardSlug)
+      ) {
         this.setWinner({ player: 'secondPlayer', card: secondPlayerCard });
       } else {
         this.setNoWinner();
@@ -216,8 +223,6 @@ class App extends React.Component {
     } else {
       this.setNoWinner();
     }
-
-    this.setState({ status: 'winner' });
   }
 
   render() {
@@ -248,7 +253,17 @@ class App extends React.Component {
       case 'winner':
         return (
           <div>
-            <WinningPlayer />
+            <GameInfosBar
+              firstPlayer={this.state.firstPlayer}
+              secondPlayer={this.state.secondPlayer}
+              game={this.state.game}
+            />
+            <WinningPlayer
+              winner={this.state.winner}
+              firstPlayer={this.state.firstPlayer}
+              secondPlayer={this.state.secondPlayer}
+              card={this.state.winner.card}
+            />
           </div>
         );
         break;
