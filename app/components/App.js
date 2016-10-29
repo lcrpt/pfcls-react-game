@@ -1,10 +1,11 @@
 import React from 'react';
-import { isNumber, includes } from 'lodash';
+import { isNumber, includes, find, isUndefined } from 'lodash';
 
 import Cards from './Cards';
 import SetUpGameRules from './setup-game/SetUpGameRules';
 import WinningPlayer from './WinningPlayer';
 import GameInfosBar from './GameInfosBar';
+import data from '../data/cards';
 
 class App extends React.Component {
   constructor() {
@@ -18,7 +19,6 @@ class App extends React.Component {
         timer: 0,
         roundInterval: 3,
         winningScore: 3,
-        roundTimer: 3,
       },
       firstPlayer: {
         name: 'Sheldon',
@@ -30,6 +30,22 @@ class App extends React.Component {
         score: 0,
         selectedCard: '',
       },
+      winner: {
+        isWinner: false,
+        player: {
+          name: '',
+          score: 0,
+          selectedCard: '',
+        },
+        card: {
+          _id: '',
+          name: '',
+          slug: '',
+          winningCards: [],
+          icon: '',
+          color: '',
+        },
+      }
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,6 +53,8 @@ class App extends React.Component {
     this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
     this.updateRound = this.updateRound.bind(this);
     this.timer = this.timer.bind(this);
+    this.getWinner = this.getWinner.bind(this);
+    this.setNoWinner = this.setNoWinner.bind(this);
   }
 
   getCurrentPlayer() {
@@ -105,7 +123,7 @@ class App extends React.Component {
           isRunning: false,
         },
       }, () => {
-        this.setState({ status: 'winner' });
+        this.getWinner();
       });
     }
   }
@@ -146,6 +164,60 @@ class App extends React.Component {
         }
       }, 1000);
     }
+  }
+
+  setWinner({ player, card }) {
+    this.setState({
+      [player]: {
+        name: this.state[player].name,
+        score: this.state[player].score += 1,
+        selectedCard: '',
+      },
+    }, () => {
+      this.setState({
+        winner: {
+          isWinner: true,
+          player: this.state[player],
+          card,
+        },
+      }, () => {
+
+      });
+    });
+  }
+
+  setNoWinner() {
+    this.setState({
+      winner: {
+        isWinner: false,
+      },
+    }, () => {
+      
+    });
+  }
+
+  getWinner() {
+    const firstPlayerCardSlug = this.state.firstPlayer.selectedCard;
+    const secondPlayerCardSlug = this.state.secondPlayer.selectedCard;
+    const firstPlayerCard = find(data, { slug: firstPlayerCardSlug });
+    const secondPlayerCard = find(data, { slug: secondPlayerCardSlug });
+
+    if (!isUndefined(firstPlayerCardSlug) ||
+        !isUndefined(secondPlayerCardSlug) ||
+        !isUndefined(firstPlayerCard) ||
+        !isUndefined(secondPlayerCard)) {
+      if (includes(firstPlayerCard.winningCards, secondPlayerCardSlug)) {
+        this.setWinner({ player: 'firstPlayer', card: firstPlayerCard });
+      } else if (includes(secondPlayerCard.winningCards, firstPlayerCardSlug)) {
+        this.setWinner({ player: 'secondPlayer', card: secondPlayerCard });
+      } else {
+        this.setNoWinner();
+      }
+    } else {
+      this.setNoWinner();
+    }
+
+    this.setState({ status: 'winner' });
   }
 
   render() {
