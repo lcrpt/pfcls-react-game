@@ -35,7 +35,7 @@ class PlayersNameForm extends React.Component {
             className="form-control"
             required
             ref="firstPlayerName"
-            defaultValue={this.props.players.firstPlayer.name}
+            defaultValue={this.props.firstPlayer.name}
           />
         </div>
         <div className="form-group label-floating">
@@ -45,7 +45,7 @@ class PlayersNameForm extends React.Component {
             className="form-control"
             required
             ref="secondPlayerName"
-            defaultValue={this.props.players.secondPlayer.name}
+            defaultValue={this.props.secondPlayer.name}
           />
         </div>
         <div className="submit text-center">
@@ -63,7 +63,12 @@ class PlayersNameForm extends React.Component {
 
 PlayersNameForm.propTypes = {
   handler: React.PropTypes.func.isRequired,
-  players: React.PropTypes.object,
+  firstPlayer: React.PropTypes.shape({
+    name: React.PropTypes.string.isRequired,
+  }),
+  secondPlayer: React.PropTypes.shape({
+    name: React.PropTypes.string.isRequired,
+  }),
 };
 
 export default PlayersNameForm;

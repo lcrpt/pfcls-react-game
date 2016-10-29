@@ -26,10 +26,10 @@ const GameInfosBar = (props) => {
           <ul className="pull-left">
             <li>
               <a>
-                {props.players.firstPlayer.name}
+                {props.firstPlayer.name}
                 &nbsp;
-                <span className="badge"  style={firstPlayer}>
-                  {props.players.firstPlayer.score}
+                <span className="badge" style={firstPlayer}>
+                  {props.firstPlayer.score}
                 </span>
               </a>
             </li>
@@ -40,10 +40,10 @@ const GameInfosBar = (props) => {
           <ul className="pull-right">
             <li>
               <a>
-                {props.players.secondPlayer.name}
+                {props.secondPlayer.name}
                 &nbsp;
                 <span className="badge" style={secondPlayer}>
-                  {props.players.secondPlayer.score}
+                  {props.secondPlayer.score}
                 </span>
               </a>
             </li>
@@ -55,15 +55,13 @@ const GameInfosBar = (props) => {
 };
 
 GameInfosBar.propTypes = {
-  players: React.PropTypes.shape({
-    firstPlayer: React.PropTypes.shape({
-      name: React.PropTypes.stringisRequired,
-      score: React.PropTypes.numberisRequired,
-    }),
-    secondPlayer: React.PropTypes.shape({
-      name: React.PropTypes.stringisRequired,
-      score: React.PropTypes.numberisRequired,
-    }),
+  firstPlayer: React.PropTypes.shape({
+    name: React.PropTypes.string.isRequired,
+    score: React.PropTypes.number.isRequired,
+  }),
+  secondPlayer: React.PropTypes.shape({
+    name: React.PropTypes.string.isRequired,
+    score: React.PropTypes.number.isRequired,
   }),
   game: React.PropTypes.shape({
     timer: React.PropTypes.number,
