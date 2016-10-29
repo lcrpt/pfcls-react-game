@@ -57,7 +57,7 @@ class App extends React.Component {
   }
 
   handleSelectCard(card) {
-
+    console.log('card', card);
   }
 
   updateRound(round) {
