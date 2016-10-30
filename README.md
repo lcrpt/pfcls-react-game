@@ -15,7 +15,7 @@
 1. `git clone git@github.com:leolassence/PFCLS-react-webpack.git`
 2. Run `npm i`
 3. Start the dev server using `npm start`
-3. Open [http://localhost:8080](http://localhost:8080)
+3. Open [http://localhost:8080](localhost:8080)
 
 ## Available Commands
 
