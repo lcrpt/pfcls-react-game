@@ -16,6 +16,9 @@ class WinningPlayer extends React.Component {
             winner={this.props.winner}
             firstPlayer={this.props.firstPlayer}
             secondPlayer={this.props.secondPlayer}
+            handleNextRound={this.props.handleNextRound}
+            handleNewGame={this.props.handleNewGame}
+            winningScore={this.props.winningScore}
           />
         </div>
       </div>
@@ -30,6 +33,9 @@ WinningPlayer.propTypes = {
     card: React.PropTypes.object,
     isWinner: React.PropTypes.bool.isRequired,
   }),
+  handleNextRound: React.PropTypes.func.isRequired,
+  handleNewGame: React.PropTypes.func.isRequired,
+  winningScore: React.PropTypes.number.isRequired,
 };
 
 export default WinningPlayer;

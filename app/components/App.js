@@ -49,6 +49,14 @@ class App extends React.Component {
       },
     };
 
+    this.defaultGameState = {
+      isRunning: false,
+      round: 1,
+      timer: 0,
+      roundInterval: 3,
+      winningScore: 3,
+    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectCard = this.handleSelectCard.bind(this);
     this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
@@ -56,6 +64,8 @@ class App extends React.Component {
     this.timer = this.timer.bind(this);
     this.getWinner = this.getWinner.bind(this);
     this.setNoWinner = this.setNoWinner.bind(this);
+    this.handleNextRound = this.handleNextRound.bind(this);
+    this.handleNewGame = this.handleNewGame.bind(this);
   }
 
   getCurrentPlayer() {
@@ -63,44 +73,49 @@ class App extends React.Component {
 
     switch (this.state.game.round) {
       case 2:
-        player = 'firstPlayer';
-        break;
+      player = 'firstPlayer';
+      break;
       case 3:
-        player = 'secondPlayer';
-        break;
+      player = 'secondPlayer';
+      break;
       default:
-        player = 'null';
+      player = 'null';
     }
 
     return player;
   }
 
   setWinner({ player, card }) {
-    this.setState({
+    const setWinningPlayerState = {
       [player]: {
         name: this.state[player].name,
         score: this.state[player].score += 1,
         selectedCard: '',
       },
-    }, () => {
-      this.setState({
-        winner: {
-          isWinner: true,
-          winner: this.state[player],
-          card,
-        },
-      }, () => {
+    };
+    const setWinnerState = {
+      winner: {
+        isWinner: true,
+        winner: this.state[player],
+        card,
+      },
+    };
+
+    this.setState(setWinningPlayerState, () => {
+      this.setState(setWinnerState, () => {
         this.setState({ status: 'winner' });
       });
     });
   }
 
   setNoWinner() {
-    this.setState({
+    const setNoWinnerState = {
       winner: {
         isWinner: false,
       },
-    }, () => {
+    };
+
+    this.setState(setNoWinnerState, () => {
       this.setState({ status: 'winner' });
     });
   }
@@ -123,9 +138,9 @@ class App extends React.Component {
       includes(secondPlayerCard.winningCards, firstPlayerCardSlug)
     ) {
       this.setWinner({ player: 'secondPlayer', card: secondPlayerCard });
-    } else if (firstPlayerCardSlug && isUndefined(secondPlayerCardSlug)) {
+    } else if (!secondPlayerCardSlug && firstPlayerCardSlug) {
       this.setWinner({ player: 'firstPlayer', card: firstPlayerCard });
-    } else if (secondPlayerCardSlug && isUndefined(firstPlayerCardSlug)) {
+    } else if (!firstPlayerCardSlug && secondPlayerCardSlug) {
       this.setWinner({ player: 'secondPlayer', card: secondPlayerCard });
     } else {
       this.setNoWinner();
@@ -133,41 +148,31 @@ class App extends React.Component {
   }
 
   updateRound(round) {
-    const availableRound = [1, 2];
+    const availableRound = [1, 2, 3];
+    const setUpdateRoundState = {
+      game: {
+        round: round += 1,
+        isRunning: true,
+        roundInterval: this.state.game.roundInterval,
+        winningScore: this.state.game.winningScore,
+      },
+    };
+    const setFinshRoundState = {
+      game: {
+        isRunning: false,
+        winningScore: this.state.game.winningScore,
+      },
+    };
 
     if (isNumber(round) && includes(availableRound, round)) {
-      this.setState({
-        game: {
-          round: round += 1,
-          isRunning: true,
-          roundInterval: this.state.game.roundInterval,
-        },
-      }, () => {
+      this.setState(setUpdateRoundState, () => {
         this.timer();
       });
     } else {
-      this.setState({
-        game: {
-          isRunning: false,
-        },
-      }, () => {
+      this.setState(setFinshRoundState, () => {
         this.getWinner();
       });
     }
-  }
-
-  handleSelectCard(card) {
-    const player = this.getCurrentPlayer();
-
-    this.setState({
-      [player]: {
-        name: this.state[player].name,
-        score: this.state[player].score,
-        selectedCard: card.card.slug,
-      },
-    }, () => {
-      this.updateRound(this.state.game.round);
-    });
   }
 
   timer() {
@@ -180,26 +185,32 @@ class App extends React.Component {
         seconds = parseInt(roundInterval % 60, 10);
 
         if (this.state.game.round === round) {
-          this.setState({
+          const setTimerState = {
             game: {
               timer: seconds,
               round: this.state.game.round,
               roundInterval: this.state.game.roundInterval,
+              winningScore: this.state.game.winningScore,
             },
-          });
+          };
+
+          this.setState(setTimerState);
         } else {
           clearInterval(timer);
         }
 
         if (--roundInterval < 0) {
-          this.setState({
+          const setFinishTimerState = {
             game: {
               isRunning: false,
               timer: 0,
               round: this.state.game.round,
               roundInterval: this.state.game.roundInterval,
+              winningScore: this.state.game.winningScore,
             },
-          }, () => {
+          };
+
+          this.setState(setFinishTimerState, () => {
             clearInterval(timer);
             this.updateRound(this.state.game.round);
           });
@@ -208,8 +219,48 @@ class App extends React.Component {
     }
   }
 
+  handleNextRound() {
+    const setNextRoundState = {
+      status: 'playing',
+      game: this.defaultGameState,
+      firstPlayer: {
+        name: this.state.firstPlayer.name,
+        score: this.state.firstPlayer.score,
+        selectedCard: '',
+      },
+      secondPlayer: {
+        name: this.state.secondPlayer.name,
+        score: this.state.secondPlayer.score,
+        selectedCard: '',
+      },
+    };
+
+    this.setState(setNextRoundState, () => {
+      this.updateRound(this.state.game.round);
+    });
+  }
+
+  handleNewGame() {
+
+  }
+
+  handleSelectCard(card) {
+    const player = this.getCurrentPlayer();
+    const setHandleSelectCardState = {
+      [player]: {
+        name: this.state[player].name,
+        score: this.state[player].score,
+        selectedCard: card.card.slug,
+      },
+    };
+
+    this.setState(setHandleSelectCardState, () => {
+      this.updateRound(this.state.game.round);
+    });
+  }
+
   handleSubmit(players) {
-    this.setState({
+    const setHandleSubmitState = {
       status: 'playing',
       firstPlayer: {
         name: players.firstPlayerName,
@@ -219,7 +270,9 @@ class App extends React.Component {
         name: players.secondPlayerName,
         score: 0,
       },
-    }, () => {
+    };
+
+    this.setState(setHandleSubmitState, () => {
       this.updateRound(this.state.game.round);
     });
   }
@@ -227,52 +280,56 @@ class App extends React.Component {
   render() {
     switch (this.state.status) {
       case 'setup':
-        return (
-          <SetUpGameRules
-            handler={this.handleSubmit}
-            firstPlayer={this.state.firstPlayer}
-            secondPlayer={this.state.secondPlayer}
+      return (
+        <SetUpGameRules
+          handler={this.handleSubmit}
+          firstPlayer={this.state.firstPlayer}
+          secondPlayer={this.state.secondPlayer}
           />
-        );
-        break;
+      );
+      break;
       case 'playing':
-        return (
-          <div>
-            <GameInfosBar
-              firstPlayer={this.state.firstPlayer}
-              secondPlayer={this.state.secondPlayer}
-              game={this.state.game}
-            />
-            <Cards
-              handler={this.handleSelectCard}
-            />
-          </div>
-        );
-        break;
-      case 'winner':
-        return (
-          <div>
-            <GameInfosBar
-              firstPlayer={this.state.firstPlayer}
-              secondPlayer={this.state.secondPlayer}
-              game={this.state.game}
-            />
-            <WinningPlayer
-              winner={this.state.winner}
-              firstPlayer={this.state.firstPlayer}
-              secondPlayer={this.state.secondPlayer}
-            />
-          </div>
-        );
-        break;
-      default:
-        return (
-          <SetUpGameRules
-            handler={this.handleSubmit}
+      return (
+        <div>
+          <GameInfosBar
             firstPlayer={this.state.firstPlayer}
             secondPlayer={this.state.secondPlayer}
+            game={this.state.game}
+            />
+          <Cards
+            handler={this.handleSelectCard}
+            />
+        </div>
+      );
+      break;
+      case 'winner':
+      return (
+        <div>
+          <GameInfosBar
+            firstPlayer={this.state.firstPlayer}
+            secondPlayer={this.state.secondPlayer}
+            game={this.state.game}
+            />
+          <WinningPlayer
+            winner={this.state.winner}
+            firstPlayer={this.state.firstPlayer}
+            secondPlayer={this.state.secondPlayer}
+            handler={this.handleClickNextRound}
+            handleNextRound={this.handleNextRound}
+            handleNewGame={this.handleNewGame}
+            winningScore={this.state.game.winningScore}
+            />
+        </div>
+      );
+      break;
+      default:
+      return (
+        <SetUpGameRules
+          handler={this.handleSubmit}
+          firstPlayer={this.state.firstPlayer}
+          secondPlayer={this.state.secondPlayer}
           />
-        );
+      );
     }
   }
 }
