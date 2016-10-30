@@ -1,58 +1,84 @@
 import React from 'react';
 
-const GameInfosBar = (props) => {
-  const infobar = {
-    padding: 0,
-    marginBottom: '10px',
-  };
+import Loader from '../shared/Loader';
+import Timer from './Timer';
 
-  let firstPlayer;
-  let secondPlayer;
-  const isPlayingColor = { backgroundColor: '#f44336' };
-
-  if (props.game.round === 2) {
-    firstPlayer = isPlayingColor;
-  } else if (props.game.round === 3) {
-    secondPlayer = isPlayingColor;
-  } else {
-    firstPlayer = {};
-    secondPlayer = {};
+class GameInfosBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { ready: false };
   }
 
-  return (
-    <footer className="footer-white" style={infobar}>
-      <div className="container">
-        <div className="row">
-          <ul className="pull-left">
-            <li>
-              <a>
-                {props.firstPlayer.name}
-                &nbsp;
-                <span className="badge" style={firstPlayer}>
-                  {props.firstPlayer.score}
-                </span>
-              </a>
-            </li>
-          </ul>
-          <ul className="pull-center">
-            <li><button className="btn btn-danger">{props.game.timer}</button></li>
-          </ul>
-          <ul className="pull-right">
-            <li>
-              <a>
-                {props.secondPlayer.name}
-                &nbsp;
-                <span className="badge" style={secondPlayer}>
-                  {props.secondPlayer.score}
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </footer>
-  );
-};
+  componentWillMount() {
+    this.setState({ ready: true });
+  }
+
+  componentWillUnmount() {
+    this.setState({ ready: false });
+  }
+
+  render() {
+    let firstPlayer;
+    let secondPlayer;
+    const isPlayingColor = { backgroundColor: '#f44336' };
+    const infobar = {
+      padding: 0,
+      marginBottom: '10px',
+    };
+
+    if (this.props.game.round === 2) {
+      firstPlayer = isPlayingColor;
+    } else if (this.props.game.round === 3) {
+      secondPlayer = isPlayingColor;
+    } else {
+      firstPlayer = {};
+      secondPlayer = {};
+    }
+
+    if (this.state.ready) {
+      return (
+        <footer className="footer-white" style={infobar}>
+          <div className="container">
+            <div className="row">
+              <ul className="pull-left">
+                <li>
+                  <a>
+                    {this.props.firstPlayer.name}
+                    &nbsp;
+                    <span className="badge" style={firstPlayer}>
+                      {this.props.firstPlayer.score}
+                    </span>
+                  </a>
+                </li>
+              </ul>
+              <ul className="pull-center">
+                <li>
+                  <Timer
+                    timer={this.props.game.timer}
+                    isRunning={this.props.game.isRunning}
+                  />
+                </li>
+              </ul>
+              <ul className="pull-right">
+                <li>
+                  <a>
+                    {this.props.secondPlayer.name}
+                    &nbsp;
+                    <span className="badge" style={secondPlayer}>
+                      {this.props.secondPlayer.score}
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </footer>
+      );
+    } else {
+      return <Loader />;
+    }
+  }
+}
 
 GameInfosBar.propTypes = {
   firstPlayer: React.PropTypes.shape({
@@ -66,6 +92,13 @@ GameInfosBar.propTypes = {
   game: React.PropTypes.shape({
     timer: React.PropTypes.number,
     round: React.PropTypes.number,
+    isRunning: React.PropTypes.bool,
+  }),
+};
+
+GameInfosBar.defaultProps = {
+  game: React.PropTypes.shape({
+    timer: 0,
   }),
 };
 

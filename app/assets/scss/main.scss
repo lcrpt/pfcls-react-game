@@ -44,6 +44,9 @@
 @import 'material-kit/example-pages';
 @import 'material-kit/responsive';
 
+// custom
+@import 'custom/loading.scss';
+
 // Bootstrap
 $icon-font-path: "bootstrap/fonts/bootstrap/";
 @import "bootstrap/_bootstrap.scss";

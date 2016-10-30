@@ -1,11 +1,21 @@
 import React from 'react';
 
+import Loader from '../shared/Loader';
+
 class WinnerPanel extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = { ready: false };
     this.isGameOver = this.isGameOver.bind(this);
     this.handleClick = this.handleClick.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ ready: true });
+  }
+
+  componentWillUnmount() {
+    this.setState({ ready: false });
   }
 
   isGameOver() {
@@ -52,23 +62,27 @@ class WinnerPanel extends React.Component {
       buttonLabel = 'Next Round';
     }
 
-    return (
-      <div className="col-xs-12">
-        <div className="card card-pricing">
-          <div className="content content-primary">
-            {gameOver}
-            <h3 className="card-title">{cardTitle}</h3>
-            <h3 className="card-title">Score</h3>
-            <ul>
-              <li>{this.props.firstPlayer.name} <b>{this.props.firstPlayer.score}</b></li>
-              <li>{this.props.secondPlayer.name} <b>{this.props.secondPlayer.score}</b></li>
-            </ul>
-            <a href="#" className="btn btn-white btn-round" onClick={this.handleClick}>{buttonLabel}</a>
-            <br /><br />
+    if (this.state.ready) {
+      return (
+        <div className="col-xs-12">
+          <div className="card card-pricing">
+            <div className="content content-primary">
+              {gameOver}
+              <h3 className="card-title">{cardTitle}</h3>
+              <h3 className="card-title">Score</h3>
+              <ul>
+                <li>{this.props.firstPlayer.name} <b>{this.props.firstPlayer.score}</b></li>
+                <li>{this.props.secondPlayer.name} <b>{this.props.secondPlayer.score}</b></li>
+              </ul>
+              <a href="#" className="btn btn-white btn-round" onClick={this.handleClick}>{buttonLabel}</a>
+              <br /><br />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <Loader />;
+    }
   }
 }
 

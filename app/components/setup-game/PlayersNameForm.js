@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Loader from '../shared/Loader';
+
 class PlayersNameForm extends React.Component {
   constructor(props) {
     super(props);
@@ -26,38 +28,42 @@ class PlayersNameForm extends React.Component {
   }
 
   render() {
-    return (
-      <form onSubmit={this.handleSubmit} noValidate={this.state.ready}>
-        <div className="form-group label-floating">
-          <label className="control-label">First player Gamer Tag</label>
-          <input
-            type="text"
-            className="form-control"
-            required
-            ref="firstPlayerName"
-            defaultValue={this.props.firstPlayer.name}
-          />
-        </div>
-        <div className="form-group label-floating">
-          <label className="control-label">Second player Gamer Tag</label>
-          <input
-            type="text"
-            className="form-control"
-            required
-            ref="secondPlayerName"
-            defaultValue={this.props.secondPlayer.name}
-          />
-        </div>
-        <div className="submit text-center">
-          <input
-            type="submit"
-            className="btn btn-danger btn-raised btn-round"
-            value="Play"
-          />
-        </div>
-        <br />
-      </form>
-    );
+    if (this.state.ready) {
+      return (
+        <form onSubmit={this.handleSubmit} noValidate={this.state.ready}>
+          <div className="form-group label-floating">
+            <label className="control-label">First player Gamer Tag</label>
+            <input
+              type="text"
+              className="form-control"
+              required
+              ref="firstPlayerName"
+              defaultValue={this.props.firstPlayer.name}
+            />
+          </div>
+          <div className="form-group label-floating">
+            <label className="control-label">Second player Gamer Tag</label>
+            <input
+              type="text"
+              className="form-control"
+              required
+              ref="secondPlayerName"
+              defaultValue={this.props.secondPlayer.name}
+            />
+          </div>
+          <div className="submit text-center">
+            <input
+              type="submit"
+              className="btn btn-danger btn-raised btn-round"
+              value="Play"
+            />
+          </div>
+          <br />
+        </form>
+      );
+    } else {
+      return <Loader />;
+    }
   }
 }
 
