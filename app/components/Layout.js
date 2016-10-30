@@ -12,4 +12,11 @@ class Layout extends React.Component {
   }
 }
 
+Layout.propTypes = {
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.arrayOf(React.PropTypes.node),
+    React.PropTypes.node,
+  ]),
+};
+
 export default Layout;

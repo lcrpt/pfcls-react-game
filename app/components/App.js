@@ -46,7 +46,7 @@ class App extends React.Component {
           icon: '',
           color: '',
         },
-      }
+      },
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -75,34 +75,61 @@ class App extends React.Component {
     return player;
   }
 
-  handleSubmit(players) {
-    this.setState({
-      status: 'playing',
-      firstPlayer: {
-        name: players.firstPlayerName,
-        score: 0,
-      },
-      secondPlayer: {
-        name: players.secondPlayerName,
-        score: 0,
-      },
-    }, () => {
-      this.updateRound(this.state.game.round);
-    });
-  }
-
-  handleSelectCard(card) {
-    const player = this.getCurrentPlayer();
-
+  setWinner({ player, card }) {
     this.setState({
       [player]: {
         name: this.state[player].name,
-        score: this.state[player].score,
-        selectedCard: card.card.slug,
+        score: this.state[player].score += 1,
+        selectedCard: '',
       },
     }, () => {
-      this.updateRound(this.state.game.round);
+      this.setState({
+        winner: {
+          isWinner: true,
+          winner: this.state[player],
+          card,
+        },
+      }, () => {
+        this.setState({ status: 'winner' });
+      });
     });
+  }
+
+  setNoWinner() {
+    this.setState({
+      winner: {
+        isWinner: false,
+      },
+    }, () => {
+      this.setState({ status: 'winner' });
+    });
+  }
+
+  getWinner() {
+    const firstPlayerCardSlug = this.state.firstPlayer.selectedCard;
+    const secondPlayerCardSlug = this.state.secondPlayer.selectedCard;
+    const firstPlayerCard = find(data, { slug: firstPlayerCardSlug });
+    const secondPlayerCard = find(data, { slug: secondPlayerCardSlug });
+
+    if (
+      !isUndefined(firstPlayerCard) &&
+      !isUndefined(firstPlayerCard.winningCards) &&
+      includes(firstPlayerCard.winningCards, secondPlayerCardSlug)
+    ) {
+      this.setWinner({ player: 'firstPlayer', card: firstPlayerCard });
+    } else if (
+      !isUndefined(secondPlayerCard) &&
+      !isUndefined(secondPlayerCard.winningCards) &&
+      includes(secondPlayerCard.winningCards, firstPlayerCardSlug)
+    ) {
+      this.setWinner({ player: 'secondPlayer', card: secondPlayerCard });
+    } else if (firstPlayerCardSlug && isUndefined(secondPlayerCardSlug)) {
+      this.setWinner({ player: 'firstPlayer', card: firstPlayerCard });
+    } else if (secondPlayerCardSlug && isUndefined(firstPlayerCardSlug)) {
+      this.setWinner({ player: 'secondPlayer', card: secondPlayerCard });
+    } else {
+      this.setNoWinner();
+    }
   }
 
   updateRound(round) {
@@ -127,6 +154,20 @@ class App extends React.Component {
         this.getWinner();
       });
     }
+  }
+
+  handleSelectCard(card) {
+    const player = this.getCurrentPlayer();
+
+    this.setState({
+      [player]: {
+        name: this.state[player].name,
+        score: this.state[player].score,
+        selectedCard: card.card.slug,
+      },
+    }, () => {
+      this.updateRound(this.state.game.round);
+    });
   }
 
   timer() {
@@ -167,62 +208,20 @@ class App extends React.Component {
     }
   }
 
-  setWinner({ player, card }) {
+  handleSubmit(players) {
     this.setState({
-      [player]: {
-        name: this.state[player].name,
-        score: this.state[player].score += 1,
-        selectedCard: '',
+      status: 'playing',
+      firstPlayer: {
+        name: players.firstPlayerName,
+        score: 0,
+      },
+      secondPlayer: {
+        name: players.secondPlayerName,
+        score: 0,
       },
     }, () => {
-      this.setState({
-        winner: {
-          isWinner: true,
-          winner: this.state[player],
-          card,
-        },
-      }, () => {
-        this.setState({ status: 'winner' });
-      });
+      this.updateRound(this.state.game.round);
     });
-  }
-
-  setNoWinner() {
-    this.setState({
-      winner: {
-        isWinner: false,
-      },
-    }, () => {
-      this.setState({ status: 'winner' });
-    });
-  }
-
-  getWinner() {
-    const firstPlayerCardSlug = this.state.firstPlayer.selectedCard;
-    const secondPlayerCardSlug = this.state.secondPlayer.selectedCard;
-    const firstPlayerCard = find(data, { slug: firstPlayerCardSlug });
-    const secondPlayerCard = find(data, { slug: secondPlayerCardSlug });
-
-    if (!isUndefined(firstPlayerCardSlug) ||
-        !isUndefined(secondPlayerCardSlug) ||
-        !isUndefined(firstPlayerCard) ||
-        !isUndefined(secondPlayerCard)) {
-      if (
-        firstPlayerCard.winningCards &&
-        includes(firstPlayerCard.winningCards, secondPlayerCardSlug)
-      ) {
-        this.setWinner({ player: 'firstPlayer', card: firstPlayerCard });
-      } else if (
-        secondPlayerCard.winningCards &&
-        includes(secondPlayerCard.winningCards, firstPlayerCardSlug)
-      ) {
-        this.setWinner({ player: 'secondPlayer', card: secondPlayerCard });
-      } else {
-        this.setNoWinner();
-      }
-    } else {
-      this.setNoWinner();
-    }
   }
 
   render() {
@@ -262,7 +261,6 @@ class App extends React.Component {
               winner={this.state.winner}
               firstPlayer={this.state.firstPlayer}
               secondPlayer={this.state.secondPlayer}
-              card={this.state.winner.card}
             />
           </div>
         );

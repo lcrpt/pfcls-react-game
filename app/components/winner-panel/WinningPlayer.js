@@ -9,8 +9,8 @@ class WinningPlayer extends React.Component {
       <div className="container">
         <div className="row">
           <WinnerCard
+            card={this.props.winner.card}
             isWinner={this.props.winner.isWinner}
-            card={this.props.card}
           />
           <WinnerPanel
             winner={this.props.winner}
@@ -24,10 +24,12 @@ class WinningPlayer extends React.Component {
 }
 
 WinningPlayer.propTypes = {
-  card: React.PropTypes.object,
   firstPlayer: React.PropTypes.object.isRequired,
   secondPlayer: React.PropTypes.object.isRequired,
-  winner: React.PropTypes.object.isRequired,
+  winner: React.PropTypes.shape({
+    card: React.PropTypes.object,
+    isWinner: React.PropTypes.bool.isRequired,
+  }),
 };
 
 export default WinningPlayer;
