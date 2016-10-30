@@ -29,7 +29,7 @@ class PlayersNameForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit} noValidate={this.state.ready}>
         <div className="form-group label-floating">
-          <label className="control-label">First player name</label>
+          <label className="control-label">First player Gamer Tag</label>
           <input
             type="text"
             className="form-control"
@@ -39,7 +39,7 @@ class PlayersNameForm extends React.Component {
           />
         </div>
         <div className="form-group label-floating">
-          <label className="control-label">Second player name</label>
+          <label className="control-label">Second player Gamer Tag</label>
           <input
             type="text"
             className="form-control"

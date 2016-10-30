@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from './Card';
-import data from '../data/cards';
+import data from '../../data/cards';
 
 class Cards extends React.Component {
   constructor(props) {
@@ -11,14 +11,14 @@ class Cards extends React.Component {
   }
 
   render() {
-    const cards = this.state.data.map(item => {
+    const cards = this.state.data.map((item) => {
       return (
         <Card
           key={item._id}
           data={item}
           handler={this.props.handler}
           col="col-xs-6"
-          />
+        />
       );
     });
 
@@ -31,5 +31,9 @@ class Cards extends React.Component {
     );
   }
 }
+
+Cards.propTypes = {
+  handler: React.PropTypes.func,
+};
 
 export default Cards;

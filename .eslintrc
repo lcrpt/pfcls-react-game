@@ -14,6 +14,7 @@
   "rules": {
     "space-before-function-paren": 0,
     "react/prefer-stateless-function": 1,
-    "forbid-prop-types": [0, { "forbid": ['any', 'array', 'object'] }]
+    "forbid-prop-types": [0, { "forbid": ['any', 'array', 'object'] }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
   }
 }
