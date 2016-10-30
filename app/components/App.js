@@ -241,7 +241,24 @@ class App extends React.Component {
   }
 
   handleNewGame() {
+    const setNewGameState = {
+      status: 'playing',
+      game: this.defaultGameState,
+      firstPlayer: {
+        name: this.state.firstPlayer.name,
+        score: 0,
+        selectedCard: '',
+      },
+      secondPlayer: {
+        name: this.state.secondPlayer.name,
+        score: 0,
+        selectedCard: '',
+      },
+    };
 
+    this.setState(setNewGameState, () => {
+      this.updateRound(this.state.game.round);
+    });
   }
 
   handleSelectCard(card) {
