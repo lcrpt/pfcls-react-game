@@ -58,7 +58,7 @@ class WinnerPanel extends React.Component {
           <div className="content content-primary">
             {gameOver}
             <h3 className="card-title">{cardTitle}</h3>
-            <h3 className="card-title">Score:</h3>
+            <h3 className="card-title">Score</h3>
             <ul>
               <li>{this.props.firstPlayer.name} <b>{this.props.firstPlayer.score}</b></li>
               <li>{this.props.secondPlayer.name} <b>{this.props.secondPlayer.score}</b></li>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from '../Card';
+import Card from '../cards/Card';
 
 const WinnerCard = (props) => {
   if (props.isWinner) {

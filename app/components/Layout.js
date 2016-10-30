@@ -1,5 +1,5 @@
 import React from 'react';
-import AppHeader from './AppHeader';
+import AppHeader from './shared/AppHeader';
 
 class Layout extends React.Component {
   render() {
