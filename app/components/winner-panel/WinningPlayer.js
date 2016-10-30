@@ -2,27 +2,45 @@ import React from 'react';
 
 import WinnerPanel from './WinnerPanel';
 import WinnerCard from './WinnerCard';
+import Loader from '../shared/Loader';
 
 class WinningPlayer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { ready: false };
+  }
+
+  componentWillMount() {
+    this.setState({ ready: true });
+  }
+
+  componentWillUnmount() {
+    this.setState({ ready: false });
+  }
+
   render() {
-    return (
-      <div className="container">
-        <div className="row">
-          <WinnerCard
-            card={this.props.winner.card}
-            isWinner={this.props.winner.isWinner}
-          />
-          <WinnerPanel
-            winner={this.props.winner}
-            firstPlayer={this.props.firstPlayer}
-            secondPlayer={this.props.secondPlayer}
-            handleNextRound={this.props.handleNextRound}
-            handleNewGame={this.props.handleNewGame}
-            winningScore={this.props.winningScore}
-          />
+    if (this.state.ready) {
+      return (
+        <div className="container">
+          <div className="row">
+            <WinnerCard
+              card={this.props.winner.card}
+              isWinner={this.props.winner.isWinner}
+            />
+            <WinnerPanel
+              winner={this.props.winner}
+              firstPlayer={this.props.firstPlayer}
+              secondPlayer={this.props.secondPlayer}
+              handleNextRound={this.props.handleNextRound}
+              handleNewGame={this.props.handleNewGame}
+              winningScore={this.props.winningScore}
+            />
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <Loader />;
+    }
   }
 }
 

@@ -2,16 +2,25 @@ import React from 'react';
 
 import Card from './Card';
 import data from '../../data/cards';
+import Loader from '../shared/Loader';
 
 class Cards extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = { data };
+    this.state = { data, ready: false };
+    this.fetchCards = this.fetchCards.bind(this);
   }
 
-  render() {
-    const cards = this.state.data.map((item) => {
+  componentWillMount() {
+    this.setState({ ready: true });
+  }
+
+  componentWillUnmount() {
+    this.setState({ ready: false });
+  }
+
+  fetchCards() {
+    return this.state.data.map((item) => {
       return (
         <Card
           key={item._id}
@@ -21,14 +30,20 @@ class Cards extends React.Component {
         />
       );
     });
+  }
 
-    return (
-      <div className="container">
-        <div className="row">
-          {cards}
+  render() {
+    if (this.state.ready) {
+      return (
+        <div className="container">
+          <div className="row">
+            {this.fetchCards()}
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <Loader />;
+    }
   }
 }
 

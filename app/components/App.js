@@ -1,3 +1,5 @@
+/* eslint no-unreachable: "error" */
+
 import React from 'react';
 import { isNumber, includes, find, isUndefined } from 'lodash';
 
@@ -8,6 +10,7 @@ import Cards from './cards/Cards';
 import SetUpGameRules from './setup-game/SetUpGameRules';
 import WinningPlayer from './winner-panel/WinningPlayer';
 import GameInfosBar from './shared/GameInfosBar';
+import Loader from './shared/Loader';
 
 class App extends React.Component {
   constructor() {
@@ -32,6 +35,14 @@ class App extends React.Component {
     this.setNoWinner = this.setNoWinner.bind(this);
     this.handleNextRound = this.handleNextRound.bind(this);
     this.handleNewGame = this.handleNewGame.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ ready: true });
+  }
+
+  componentWillUnmount() {
+    this.setState({ ready: false });
   }
 
   getCurrentPlayer() {
@@ -154,6 +165,7 @@ class App extends React.Component {
           const setTimerState = {
             game: {
               timer: seconds,
+              isRunning: true,
               round: this.state.game.round,
               roundInterval: this.state.game.roundInterval,
               winningScore: this.state.game.winningScore,
@@ -261,58 +273,62 @@ class App extends React.Component {
   }
 
   render() {
-    switch (this.state.status) {
-      case 'setup':
-        return (
-          <SetUpGameRules
-            handler={this.handleSubmit}
-            firstPlayer={this.state.firstPlayer}
-            secondPlayer={this.state.secondPlayer}
-          />
-        );
-      break;
-      case 'playing':
-        return (
-          <div>
-            <GameInfosBar
+    if (this.state.ready) {
+      switch (this.state.status) {
+        case 'setup':
+          return (
+            <SetUpGameRules
+              handler={this.handleSubmit}
               firstPlayer={this.state.firstPlayer}
               secondPlayer={this.state.secondPlayer}
-              game={this.state.game}
             />
-            <Cards
-              handler={this.handleSelectCard}
-            />
-          </div>
-        );
+          );
         break;
-      case 'winner':
-        return (
-          <div>
-            <GameInfosBar
+        case 'playing':
+          return (
+            <div>
+              <GameInfosBar
+                firstPlayer={this.state.firstPlayer}
+                secondPlayer={this.state.secondPlayer}
+                game={this.state.game}
+              />
+              <Cards
+                handler={this.handleSelectCard}
+              />
+            </div>
+          );
+          break;
+        case 'winner':
+          return (
+            <div>
+              <GameInfosBar
+                firstPlayer={this.state.firstPlayer}
+                secondPlayer={this.state.secondPlayer}
+                game={this.state.game}
+              />
+              <WinningPlayer
+                winner={this.state.winner}
+                firstPlayer={this.state.firstPlayer}
+                secondPlayer={this.state.secondPlayer}
+                handler={this.handleClickNextRound}
+                handleNextRound={this.handleNextRound}
+                handleNewGame={this.handleNewGame}
+                winningScore={this.state.game.winningScore}
+              />
+            </div>
+          );
+          break;
+        default:
+          return (
+            <SetUpGameRules
+              handler={this.handleSubmit}
               firstPlayer={this.state.firstPlayer}
               secondPlayer={this.state.secondPlayer}
-              game={this.state.game}
             />
-            <WinningPlayer
-              winner={this.state.winner}
-              firstPlayer={this.state.firstPlayer}
-              secondPlayer={this.state.secondPlayer}
-              handler={this.handleClickNextRound}
-              handleNextRound={this.handleNextRound}
-              handleNewGame={this.handleNewGame}
-              winningScore={this.state.game.winningScore}
-            />
-          </div>
-        );
-        break;
-      default:
-        return (
-          <SetUpGameRules
-            handler={this.handleSubmit}
-            firstPlayer={this.state.firstPlayer}
-            secondPlayer={this.state.secondPlayer}
-          />
-        );
+          );
+      }
+    } else {
+      return <Loader />;
     }
   }
 }
