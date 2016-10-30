@@ -18,7 +18,7 @@ const WinnerCard = (props) => {
 
 WinnerCard.propTypes = {
   card: React.PropTypes.shape({
-    _id: React.PropTypes.string.isRequired,
+    _id: React.PropTypes.string,
   }),
   isWinner: React.PropTypes.bool.isRequired,
 };
