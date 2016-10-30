@@ -26,6 +26,8 @@ class Cards extends React.Component {
           key={item._id}
           data={item}
           handler={this.props.handler}
+          isRunning={this.props.isRunning}
+          timer={this.props.timer}
           col="col-xs-6"
         />
       );
@@ -33,7 +35,7 @@ class Cards extends React.Component {
   }
 
   render() {
-    if (this.state.ready) {
+    if (this.state.ready && this.props.isRunning) {
       return (
         <div className="container">
           <div className="row">
@@ -48,6 +50,8 @@ class Cards extends React.Component {
 }
 
 Cards.propTypes = {
+  isRunning: React.PropTypes.bool,
+  timer: React.PropTypes.number,
   handler: React.PropTypes.func,
 };
 

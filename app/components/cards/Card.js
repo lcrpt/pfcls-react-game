@@ -20,7 +20,7 @@ class Card extends React.Component {
   handleClick(event) {
     event.preventDefault();
 
-    if (this.props.handler) {
+    if (this.props.handler && this.props.isRunning && this.props.timer) {
       this.props.handler({
         card: this.props.data,
       });
@@ -64,6 +64,8 @@ Card.propTypes = {
     name: React.PropTypes.string.isRequired,
   }),
   col: React.PropTypes.string.isRequired,
+  isRunning: React.PropTypes.bool,
+  timer: React.PropTypes.number,
   handler: React.PropTypes.func,
 };
 

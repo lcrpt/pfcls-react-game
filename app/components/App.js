@@ -293,6 +293,8 @@ class App extends React.Component {
                 game={this.state.game}
               />
               <Cards
+                isRunning={this.state.game.isRunning}
+                timer={this.state.game.timer}
                 handler={this.handleSelectCard}
               />
             </div>
