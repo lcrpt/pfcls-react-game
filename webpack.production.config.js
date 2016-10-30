@@ -53,10 +53,9 @@ const config = {
 
   plugins: [
     HtmlWebpackPluginConfig,
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({ comments: false }),
     new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }),
-    new ExtractTextPlugin('style.css', { allChunks: false }),
+    new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
     new CopyWebpackPlugin([{ from: 'app/vendors', to: 'vendors' }]),
   ],
 };
