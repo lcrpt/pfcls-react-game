@@ -6,14 +6,11 @@
 - [x] es6
 - [x] React Router
 - [x] Webpack Dev Server
-- [x] Hot Reloading using
+- [x] Hot Code Reloading
 - [x] SASS
-- [x] Separate CSS stylesheets generation
 - [x] eslint
 
 ## Starting the dev server
-
-Make sure you have Node.js installed.
 
 1. `git clone git@github.com:leolassence/PFCLS-react-webpack.git`
 2. Run `npm i`
@@ -23,5 +20,6 @@ Make sure you have Node.js installed.
 ## Available Commands
 
 - `npm start` - start the dev server
-- `npm run lint` - execute an eslint check
+- `npm run lint` - execute an lint check
 - `npm test` - run all tests
+- `precommit` - run lint and tests

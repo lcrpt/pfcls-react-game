@@ -10,7 +10,6 @@
     "lint": "eslint app",
     "test": "mocha --compilers js:babel-register --recursive ./tests/**/*.js",
     "precommit": "npm run lint && npm test",
-    "prepush": "npm run lint && npm test"
   },
   "author": "",
   "license": "MIT",
