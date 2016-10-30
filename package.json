@@ -4,7 +4,8 @@
   "description": "PFCLS-react-webpack",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --devtool source-map --hot --inline --content-base public --history-api-fallback",
+    "start": "./node_modules/.bin/babel-node server.js",
+    "dev": "webpack-dev-server --devtool source-map --hot --inline --content-base public --history-api-fallback",
     "production": "cross-env NODE_ENV=production node_modules/.bin/webpack --config webpack.production.config.js",
     "bundle": "node_modules/.bin/webpack -p",
     "lint": "eslint app",
