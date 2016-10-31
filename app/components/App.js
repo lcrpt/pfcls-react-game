@@ -312,7 +312,6 @@ class App extends React.Component {
                 winner={this.state.winner}
                 firstPlayer={this.state.firstPlayer}
                 secondPlayer={this.state.secondPlayer}
-                handler={this.handleClickNextRound}
                 handleNextRound={this.handleNextRound}
                 handleNewGame={this.handleNewGame}
                 winningScore={this.state.game.winningScore}
