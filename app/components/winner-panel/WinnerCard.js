@@ -2,18 +2,24 @@ import React from 'react';
 
 import Card from '../cards/Card';
 
-const WinnerCard = (props) => {
-  if (props.isWinner) {
-    return (
-      <Card
-        key={props.card._id}
-        data={props.card}
-        col="col-xs-12"
-      />
-    );
+class WinnerCard extends React.Component {
+  constructor(props) {
+    super(props);
   }
 
-  return false;
+  render() {
+    if (this.props.isWinner) {
+      return (
+        <Card
+          key={this.props.card._id}
+          data={this.props.card}
+          col="col-xs-12"
+        />
+      );
+    }
+
+    return false;
+  }
 };
 
 WinnerCard.propTypes = {

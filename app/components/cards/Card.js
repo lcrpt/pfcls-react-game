@@ -59,11 +59,11 @@ class Card extends React.Component {
 
 Card.propTypes = {
   data: React.PropTypes.shape({
-    color: React.PropTypes.string.isRequired,
-    icon: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
+    color: React.PropTypes.string,
+    icon: React.PropTypes.string,
+    name: React.PropTypes.string,
   }),
-  col: React.PropTypes.string.isRequired,
+  col: React.PropTypes.string,
   isRunning: React.PropTypes.bool,
   timer: React.PropTypes.number,
   handler: React.PropTypes.func,
