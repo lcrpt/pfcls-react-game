@@ -26,7 +26,7 @@ const config = {
   },
 
   devServer: {
-    outputPath: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, 'dist'),
   },
 
   module: {
@@ -35,7 +35,7 @@ const config = {
         test: /\.js?$/,
         exclude: /node_modules/,
         include: path.resolve(__dirname, 'app'),
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           presets: ['react-hmre'],
         },

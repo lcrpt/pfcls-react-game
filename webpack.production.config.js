@@ -1,17 +1,19 @@
 const path = require('path');
+
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const OpenBrowserPlugin = require('open-browser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: __dirname + '/app/index.html',
+  template: `${__dirname}/app/index.html`,
   filename: 'index.html',
   inject: 'body',
 });
 
 const config = {
-  devtool: 'cheap-module-source-map',
+  devtool: 'cheap-module-eval-source-map',
 
   entry: [
     path.resolve(__dirname, 'app/main.js'),
@@ -24,7 +26,7 @@ const config = {
   },
 
   devServer: {
-    outputPath: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, 'dist'),
   },
 
   module: {
@@ -33,7 +35,7 @@ const config = {
         test: /\.js?$/,
         exclude: /node_modules/,
         include: path.resolve(__dirname, 'app'),
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           presets: ['react-hmre'],
         },
@@ -50,7 +52,7 @@ const config = {
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
     ],
   },
-
+  
   plugins: [
     HtmlWebpackPluginConfig,
     new webpack.optimize.UglifyJsPlugin({ comments: false }),
